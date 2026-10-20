@@ -1,0 +1,26 @@
+# VladSchool — file da non committare
+
+# Backend (vive sul FTP, mai nel repo)
+api/.env
+api/.env.local
+
+# Dependencies
+node_modules/
+package-lock.json
+.npmrc
+
+# Build output (se si aggiunge un framework)
+dist/
+build/
+.next/
+out/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Log
+*.log

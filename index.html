@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="it" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#FF7A00">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="VladSchool">
+  <meta name="description" content="Tutta la scuola in un'app — solver matematica, scienze, italiano e molto altro.">
+
+  <title>VladSchool — Tutta la scuola in un'app</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-512.png">
+  <link rel="apple-touch-icon" href="/assets/icon-192.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Splash screen -->
+  <div id="splash" class="splash active">
+    <div class="splash-inner">
+      <div class="logo-bat">🦇</div>
+      <h1>VladSchool</h1>
+      <p>Tutta la scuola in un'app</p>
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <!-- Header / Sidebar toggle -->
+  <header class="header">
+    <button class="btn-toggle" id="btnMenu" aria-label="Apri menu">☰</button>
+    <div class="brand">VladSchool</div>
+    <div class="actions">
+      <button class="btn-icon" id="btnTheme" aria-label="Cambia tema">🌙</button>
+      <button class="btn-icon" id="btnOffline" aria-label="Stato offline" title="Offline" hidden>📴</button>
+    </div>
+  </header>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">VladSchool</div>
+      <button class="btn-close" id="btnClose" aria-label="Chiudi menu">✕</button>
+    </div>
+    <nav class="sidebar-nav">
+      <h3 class="nav-title">Strumenti</h3>
+      <ul>
+        <li><a href="#" data-tool="home" class="nav-link active">🏠 Home</a></li>
+        <li><a href="#" data-tool="math" class="nav-link">🧮 Matematica</a></li>
+        <li><a href="#" data-tool="science" class="nav-link">🔬 Scienze</a></li>
+        <li><a href="#" data-tool="italian" class="nav-link">📖 Italiano</a></li>
+        <li><a href="#" data-tool="history" class="nav-link">🏛 Storia &amp; Geo</a></li>
+        <li><a href="#" data-tool="english" class="nav-link">🇬🇧 Inglese</a></li>
+        <li><a href="#" data-tool="study" class="nav-link">🧠 Studiare</a></li>
+        <li><a href="#" data-tool="organize" class="nav-link">🗓 Organizza</a></li>
+        <li><a href="#" data-tool="games" class="nav-link">🎮 Giochi</a></li>
+        <li><a href="#" data-tool="creative" class="nav-link">🎨 Creatività</a></li>
+      </ul>
+      <h3 class="nav-title">Account</h3>
+      <ul>
+        <li><a href="#" data-tool="login" class="nav-link">🔐 Accedi / Registrati</a></li>
+        <li><a href="#" data-tool="settings" class="nav-link">⚙ Impostazioni</a></li>
+        <li><a href="#" data-tool="about" class="nav-link">ℹ Info</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <div class="overlay" id="overlay" hidden></div>
+
+  <!-- Main content -->
+  <main class="main">
+    <section id="view-home" class="view active">
+      <h2>Benvenuto in VladSchool</h2>
+      <p class="subtitle">Scegli uno strumento per iniziare</p>
+
+      <div class="tools-grid">
+        <div class="tool-card" data-tool="math">
+          <div class="tool-icon">🧮</div>
+          <h3>Matematica</h3>
+          <p>Solver equazioni, frazioni, geometria e calcolatrice scientifica</p>
+        </div>
+        <div class="tool-card" data-tool="science">
+          <div class="tool-icon">🔬</div>
+          <h3>Scienze</h3>
+          <p>Tavola periodica, esperimenti, fisica e chimica</p>
+        </div>
+        <div class="tool-card" data-tool="italian">
+          <div class="tool-icon">📖</div>
+          <h3>Italiano</h3>
+          <p>Analisi grammaticale, coniugatore verbi, ortografia</p>
+        </div>
+        <div class="tool-card" data-tool="history">
+          <div class="tool-icon">🏛</div>
+          <h3>Storia &amp; Geografia</h3>
+          <p>Linee del tempo, capitali, regioni d'Italia</p>
+        </div>
+        <div class="tool-card" data-tool="english">
+          <div class="tool-icon">🇬🇧</div>
+          <h3>Inglese</h3>
+          <p>Verbi irregolari, grammatica, vocabolario</p>
+        </div>
+        <div class="tool-card" data-tool="study">
+          <div class="tool-icon">🧠</div>
+          <h3>Studiare meglio</h3>
+          <p>Flashcard, ripetizione spaziata, timer Pomodoro</p>
+        </div>
+        <div class="tool-card" data-tool="organize">
+          <div class="tool-icon">🗓</div>
+          <h3>Organizzazione</h3>
+          <p>Media voti, orario, compiti, assenze</p>
+        </div>
+        <div class="tool-card" data-tool="games">
+          <div class="tool-icon">🎮</div>
+          <h3>Giochi educativi</h3>
+          <p>Quiz a tempo, impiccato, sudoku, memory</p>
+        </div>
+        <div class="tool-card" data-tool="creative">
+          <div class="tool-icon">🎨</div>
+          <h3>Creatività</h3>
+          <p>Lavagna, copertine, presentazioni, simboli</p>
+        </div>
+      </div>
+
+      <div class="easter-egg" id="easterEgg" hidden>
+        <p>🤫 Hai trovato l'easter egg VLAD!</p>
+      </div>
+    </section>
+
+    <!-- Generic tool view -->
+    <section id="view-tool" class="view" hidden>
+      <header class="view-header">
+        <button class="btn-back" id="btnBack" aria-label="Torna indietro">←</button>
+        <h2 id="toolTitle">Strumento</h2>
+      </header>
+      <div id="toolContent">
+        <div class="placeholder">
+          <div class="placeholder-icon">🚧</div>
+          <h3>In arrivo</h3>
+          <p>Questo strumento sarà disponibile nella prossima versione.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Login view -->
+    <section id="view-login" class="view" hidden>
+      <header class="view-header">
+        <button class="btn-back" id="btnBackLogin" aria-label="Torna indietro">←</button>
+        <h2>Account</h2>
+      </header>
+      <div class="card login-card">
+        <h3>Accedi</h3>
+        <form id="formLogin">
+          <div class="field">
+            <label>Email</label>
+            <input type="email" name="email" required placeholder="nome@esempio.it">
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" name="password" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="btn btn-primary">Accedi</button>
+        </form>
+        <p class="divider">o</p>
+        <form id="formRegister">
+          <h3>Registrati</h3>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" name="email" required placeholder="nome@esempio.it">
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" name="password" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="btn btn-outline">Crea account</button>
+        </form>
+        <p class="hint">L'uso anonimo funziona senza account (dati in locale).</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <script src="js/app.js"></script>
+  <script>
+    // Service worker registration
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        console.log('SW registrato', reg.scope);
+      }).catch(err => {
+        console.log('SW errore', err);
+      });
+    }
+
+    // Online/offline badge
+    const btnOffline = document.getElementById('btnOffline');
+    const updateOffline = () => {
+      if (btnOffline) btnOffline.hidden = navigator.onLine;
+    };
+    window.addEventListener('online', updateOffline);
+    window.addEventListener('offline', updateOffline);
+    updateOffline();
+  </script>
+</body>
+</html>

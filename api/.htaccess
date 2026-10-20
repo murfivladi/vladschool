@@ -1,0 +1,39 @@
+# VladSchool API — protezione e rewrite (shared hosting Apache)
+
+Options -Indexes
+
+# Blocca accesso diretto a .env e src/
+<Files ".env">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<FilesMatch "^\.env">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<DirectoryMatch "src/.*">
+    Order allow,deny
+    Deny from all
+</DirectoryMatch>
+
+# Rewrite: tutte le richieste a index.php (front controller)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /school/api/
+
+    # Non riscrivere file esistenti
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Tutto il resto va al front controller
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>
+
+# Headers CORS base (viene affinato in PHP da ALLOWED_ORIGIN)
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "no-referrer"
+</IfModule>
