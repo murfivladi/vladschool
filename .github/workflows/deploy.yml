@@ -1,0 +1,62 @@
+name: 🚀 Deploy via FTP (Self-Hosted)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Ref da deployare (branch, tag o SHA)'
+        required: false
+        default: main
+
+concurrency:
+  group: ftp-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: 📤 Deploy su shared hosting (FTPS)
+    runs-on: self-hosted
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.ref || github.ref }}
+          fetch-depth: 1
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 🏗️ Build frontend (se package.json presente)
+        run: |
+          if [ -f package.json ]; then
+            npm ci
+            npm run build
+          fi
+        shell: bash
+
+      - name: 📤 Deploy via FTPS su FTP_DIR
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.1
+        with:
+          user: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          host: ${{ secrets.FTP_HOST }}
+          local-dir: ./
+          server-dir: ${{ secrets.FTP_DIR }}
+          # FTP_SSL == "true" -> FTPS attivo; qualsiasi altro valore (o vuoto) -> FTPS disattivato
+          secure: ${{ secrets.FTP_SSL != 'false' }}
+          # Esclude file che non devono finire sul server
+          exclude: |
+            .git/
+            .github/
+            node_modules/
+            .env
+            .env.local
+            *.md
+            .gitignore
+            .npmrc
+            package-lock.json
