@@ -1,0 +1,29 @@
+# VladSchool — file da non committare
+
+# Backend (vive sul FTP, mai nel repo)
+api/.env
+api/.env.local
+api/install.php
+
+# Frontend
+frontend/node_modules/
+frontend/package-lock.json
+frontend/.npmrc
+frontend/dist/
+frontend/.vite/
+
+# Build output generici
+dist/
+build/
+.next/
+out/
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Log
+*.log
