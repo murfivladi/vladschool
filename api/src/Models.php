@@ -1,5 +1,5 @@
 <?php
-// VladSchool Models — proxy lista modelli polza.ai /v1/models
+// VladSchool Models — proxy lista modelli polza.ai /v1/models + mapping tool
 
 declare(strict_types=1);
 
@@ -11,7 +11,7 @@ class Models {
         $baseUrl = rtrim($this->config->get('POLZA_BASE_URL', 'https://api.polza.ai/v1'), '/');
 
         if ($apiKey === '') {
-            return ['ok' => false, 'error' => 'Chiave polza.ai non configurata', 'models' => []];
+            return ['ok' => false, 'error' => 'Chiave polza.ai non configurata', 'models' => [], 'mapping' => []];
         }
 
         try {
@@ -26,16 +26,16 @@ class Models {
             curl_close($ch);
 
             if ($resp === false || $http >= 400) {
-                return ['ok' => false, 'error' => 'Impossibile caricare modelli (' . $http . ')', 'models' => []];
+                return ['ok' => false, 'error' => 'Impossibile caricare modelli (' . $http . ')', 'models' => [], 'mapping' => []];
             }
             $data = json_decode($resp, true);
             $models = [];
             foreach (($data['data'] ?? []) as $m) {
                 $models[] = $m['id'] ?? $m;
             }
-            return ['ok' => true, 'models' => $models];
+            return ['ok' => true, 'models' => $models, 'mapping' => \Ai::allModels()];
         } catch (\Throwable $e) {
-            return ['ok' => false, 'error' => $e->getMessage(), 'models' => []];
+            return ['ok' => false, 'error' => $e->getMessage(), 'models' => [], 'mapping' => []];
         }
     }
 }

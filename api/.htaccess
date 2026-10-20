@@ -18,20 +18,22 @@ Options -Indexes
     Deny from all
 </DirectoryMatch>
 
+# install.php: accessibile ma consigliare di rimuovere dopo l'uso
+<Files "install.php">
+    Order allow,deny
+    Allow from all
+</Files>
+
 # Rewrite: tutte le richieste a index.php (front controller)
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /school/api/
 
-    # Non riscrivere file esistenti
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-
-    # Tutto il resto va al front controller
     RewriteRule ^ index.php [QSA,L]
 </IfModule>
 
-# Headers CORS base (viene affinato in PHP da ALLOWED_ORIGIN)
 <IfModule mod_headers.c>
     Header always set X-Content-Type-Options "nosniff"
     Header always set X-Frame-Options "SAMEORIGIN"

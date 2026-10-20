@@ -1,4 +1,4 @@
-name: 🚀 Deploy via FTP (Self-Hosted)
+name: 🚀 Deploy Vite + FTPS (Self-Hosted)
 
 on:
   push:
@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   deploy:
-    name: 📤 Deploy su shared hosting (FTPS)
+    name: 📤 Build Vite e deploy FTPS
     runs-on: self-hosted
     steps:
       - name: 📥 Checkout repository
@@ -31,32 +31,39 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: 🏗️ Build frontend (se package.json presente)
-        run: |
-          if [ -f package.json ]; then
-            npm ci
-            npm run build
-          fi
-        shell: bash
+      - name: 📦 Install dipendenze frontend
+        run: npm ci
+        working-directory: ./frontend
 
-      - name: 📤 Deploy via FTPS su FTP_DIR
+      - name: 🏗️ Build statico Vite
+        run: npm run build
+        working-directory: ./frontend
+
+      - name: 📤 Deploy frontend statico su FTP_DIR
         uses: SamKirkland/FTP-Deploy-Action@v4.4.1
         with:
           user: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
           host: ${{ secrets.FTP_HOST }}
-          local-dir: ./
+          local-dir: ./frontend/dist/
           server-dir: ${{ secrets.FTP_DIR }}
-          # FTP_SSL == "true" -> FTPS attivo; qualsiasi altro valore (o vuoto) -> FTPS disattivato
           secure: ${{ secrets.FTP_SSL != 'false' }}
-          # Esclude file che non devono finire sul server
           exclude: |
-            .git/
-            .github/
-            node_modules/
+            *.html.map
+            *.css.map
+            *.js.map
+
+      - name: 📤 Deploy backend API su FTP_DIR/api (escluso .env)
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.1
+        with:
+          user: ${{ secrets.FTP_USER }}
+          password: ${{ secrets.FTP_PASS }}
+          host: ${{ secrets.FTP_HOST }}
+          local-dir: ./api/
+          server-dir: ${{ secrets.FTP_DIR }}/api
+          secure: ${{ secrets.FTP_SSL != 'false' }}
+          exclude: |
             .env
             .env.local
-            *.md
-            .gitignore
-            .npmrc
-            package-lock.json
+            install.php
+            vendor/

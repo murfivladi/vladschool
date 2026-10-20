@@ -3,13 +3,16 @@
 # Backend (vive sul FTP, mai nel repo)
 api/.env
 api/.env.local
+api/install.php
 
-# Dependencies
-node_modules/
-package-lock.json
-.npmrc
+# Frontend
+frontend/node_modules/
+frontend/package-lock.json
+frontend/.npmrc
+frontend/dist/
+frontend/.vite/
 
-# Build output (se si aggiunge un framework)
+# Build output generici
 dist/
 build/
 .next/

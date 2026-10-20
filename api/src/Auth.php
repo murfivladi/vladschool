@@ -1,5 +1,5 @@
 <?php
-// VladSchool Auth — registrazione/login con password_hash, sessioni JWT-like
+// VladSchool Auth — registrazione/login con password_hash, sessioni
 
 declare(strict_types=1);
 
@@ -24,7 +24,7 @@ class Auth {
         $stmt->execute([$email, $hash]);
         $id = (int) $pdo->lastInsertId();
         $this->setSession($id);
-        return ['ok' => true, 'user' => ['id' => $id, 'email' => $email]];
+        return ['ok' => true, 'user' => ['id' => $id, 'email' => $email, 'role' => 'studente']];
     }
 
     public function login(string $email, string $password): array {

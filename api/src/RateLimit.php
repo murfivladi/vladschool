@@ -13,20 +13,18 @@ class RateLimit {
         $key = $id ? "user:$id" : "ip:$ip";
 
         $pdo = $this->db->connect();
-        // Tabella semplice di contatore (creata al volo se non esiste)
         try {
             $pdo->exec("CREATE TABLE IF NOT EXISTS " . $this->db->table('rate_limit') . " (
                 `key` VARCHAR(120) PRIMARY KEY,
-                `count` INT UNSIGNED NOT NULL DEFAULT 0,
-                `window_start` INT UNSIGNED NOT NULL
+                count INT UNSIGNED NOT NULL DEFAULT 0,
+                window_start INT UNSIGNED NOT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
         } catch (\Throwable $e) {
-            // se non si può creare la tabella, non bloccare
             return;
         }
 
         $now = (int) time();
-        $windowStart = $now - ($now % 3600); // inizio ora corrente
+        $windowStart = $now - ($now % 3600);
 
         $pdo->beginTransaction();
         $stmt = $pdo->prepare("SELECT count, window_start FROM " . $this->db->table('rate_limit') . " WHERE `key` = ? FOR UPDATE");
@@ -38,12 +36,13 @@ class RateLimit {
             if ($newCount > $limit) {
                 $pdo->rollBack();
                 http_response_code(429);
-                echo json_encode(['ok' => false, 'error' => 'Rate limit superato. Riprova tra un' . ' ora.'], JSON_UNESCAPED_UNICODE);
+                echo json_encode(['ok' => false, 'error' => 'Rate limit superato. Riprova tra un\'ora.'], JSON_UNESCAPED_UNICODE);
                 exit;
             }
             $pdo->prepare("UPDATE " . $this->db->table('rate_limit') . " SET count = ? WHERE `key` = ?")->execute([$newCount, $key]);
         } else {
-            $pdo->prepare("INSERT INTO " . $this->db->table('rate_limit') . " (`key`, count, window_start) VALUES (?, 1, ?) ON DUPLICATE KEY UPDATE count = 1, window_start = ?")->execute([$key, $windowStart, $windowStart]);
+            $pdo->prepare("INSERT INTO " . $this->db->table('rate_limit') . " (`key`, count, window_start) VALUES (?, 1, ?)
+                           ON DUPLICATE KEY UPDATE count = 1, window_start = ?")->execute([$key, $windowStart, $windowStart]);
         }
         $pdo->commit();
     }

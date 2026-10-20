@@ -24,15 +24,4 @@ class Log {
         $stmt = $pdo->query("SELECT * FROM " . $this->db->table('ai_log') . " ORDER BY created_at DESC LIMIT 100");
         return ['ok' => true, 'items' => $stmt->fetchAll()];
     }
-
-    public function add(string $tool, string $model, ?int $userId, bool $ok, ?string $error = null): void {
-        try {
-            $pdo = $this->db->connect();
-            $this->list(); // crea tabella se serve
-            $stmt = $pdo->prepare("INSERT INTO " . $this->db->table('ai_log') . " (tool, model, user_id, ok, error) VALUES (?, ?, ?, ?, ?)");
-            $stmt->execute([$tool, $model, $userId, $ok ? 1 : 0, $error]);
-        } catch (\Throwable $e) {
-            error_log("[VladSchool Log] " . $e->getMessage());
-        }
-    }
 }
